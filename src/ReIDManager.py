@@ -11,7 +11,7 @@ from typing import List
 from containers import Tracker
 
 class ReIDManager(object):
-    def __init__(self, model_path : str, model_name : str = "resnet50", threshold=0.75, img_size=(256,128)) -> None:
+    def __init__(self, model_path : str, model_name : str = "resnet50", threshold=0.75, lower_threshold=0.7, img_size=(256,128)) -> None:
 
         if not os.path.exists(model_path):
             raise FileNotFoundError(f"The model path: {model_path} doenst exist")
@@ -19,6 +19,7 @@ class ReIDManager(object):
         self.__model_path : str = model_path
         self.__model_name = model_name
         self.__threshold = threshold
+        self.__lower_threshold = lower_threshold
         self.__trackers_counter = 0
         self.__img_size = img_size
         self.__loadExtractor()
@@ -34,7 +35,7 @@ class ReIDManager(object):
         feature = self.__extractor(img_patch)
         for tracker in self.__trackers:
             if track_id == tracker.track_id:
-                if tracker.getDistance(feature) < self.__threshold:
+                if self.__lower_threshold < tracker.getDistance(feature) < self.__threshold:
                     tracker.addFeature(feature)
                 return tracker.id
         distances = []

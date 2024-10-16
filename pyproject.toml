@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+
+[project]
+name = "reidmanager"
+version = "0.1.1"
+authors = [
+  { name="Luís Felipe Milczarek Quadros", email="luis.milczarek@furg.br" },
+]
+description = "An ReID packaged to extract IDs based on features"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "torchreid>=1.4",
+    "numpy"
+]
+[project.urls]
+Homepage = "https://github.com/LuisMilczarek/ReIDManager"
+Issues = "https://github.com/LuisMilczarek/ReIDManager/issues"

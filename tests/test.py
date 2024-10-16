@@ -22,7 +22,7 @@ def main() -> None:
 
     manager = ReIDManager(MODEL_PATH)
 
-    print(f"Video Info:\n\tResolution: {width}x{height}\n\tFPS: {fps:.02f}\n\tTotal Frames: {total_frames}")
+    print(f"Video Info:\n\tResolution: {width}x{height}\n\tFPS: {fps:.02f}\n\tTotal Frames: {total_frames-1}")
 
     writer = cv.VideoWriter(OUTPUT_FILE,cv.VideoWriter_fourcc(*'mp4v'), fps,(width,height))
 
@@ -42,7 +42,7 @@ def main() -> None:
                 for (x1,y1,x2,y2), id, score in zip(result.boxes.xyxy.int().cpu().numpy(), result.boxes.id.int().cpu().tolist(), result.boxes.conf.cpu().tolist()):
                     if score < 0.75:
                         continue
-                    id = manager.extract_id(id, frame[x1:x2,y1:y2])
+                    id = manager.extract_id(id, frame[y1:y2,x1:x2])
                     frame = cv.rectangle(frame,(int(x1),int(y1)),(int(x2),int(y2)),(255,0,0),3)
                     cv.putText(frame,f"ID: {id}", (x1,y1),cv.FONT_HERSHEY_PLAIN,4, (255,0,0),4)
         writer.write(frame)

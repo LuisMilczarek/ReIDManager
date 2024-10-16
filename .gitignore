@@ -2,3 +2,5 @@ models/
 __pycache__/
 *.mp4
 *.pt
+dist/
+src/reidmanager.egg-info
