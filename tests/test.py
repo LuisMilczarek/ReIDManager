@@ -6,11 +6,11 @@ from ultralytics import YOLO
 from ultralytics.engine.results import Results
 from ReIDManager import ReIDManager
 
-MODEL_PATH = "./models/model.pt"
+MODEL_PATH = "./models/model.pth.tar-20"
 YOLO_MODEL = "./yolov8n-pose.pt"
 INPUT_FILE = "./sample.mp4"
 OUTPUT_FILE = "./output.mp4"
-
+MODEL_NAME = "osnet_x1_0"
 
 
 def main() -> None:
@@ -20,7 +20,7 @@ def main() -> None:
     width = int(cap.get(cv.CAP_PROP_FRAME_WIDTH))
     total_frames = int(cap.get(cv.CAP_PROP_FRAME_COUNT))
 
-    manager = ReIDManager(MODEL_PATH)
+    manager = ReIDManager(MODEL_PATH,MODEL_NAME,threshold=0.7, lower_threshold=0.5)
 
     print(f"Video Info:\n\tResolution: {width}x{height}\n\tFPS: {fps:.02f}\n\tTotal Frames: {total_frames-1}")
 

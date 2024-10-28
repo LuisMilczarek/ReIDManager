@@ -56,7 +56,48 @@ class ReIDManager(object):
             self.__trackers_counter += 1 
             return self.__trackers[-1].id
     
-   
+    # def extract_ids(self, track_ids : List[int], img_patchs : List[np.ndarray]) -> List[int]:
+    #     if len(track_ids) != len(img_patchs):
+    #         raise ValueError(f"Track_ids (size {len(track_ids)} size is different from img_patchs (size {len(img_patchs)})")
+    #     ids = []
+    #     length = len(track_ids)
+    #     features = self.__extractor(img_patchs)
+
+    #     #Adicionar container com i e track nao associados ainda
+    #     for i in range(length):
+    #         id = -1
+    #         for tracker in self.__trackers:
+    #             #print(f"\n\n***{tracker.track_id}***\n\n")
+    #             if track_ids[i] == tracker.track_id:
+    #                 id = tracker.id
+    #                 #print(features[i])
+    #                 if self.__lower_threshold < tracker.getDistance(torch.unsqueeze(features[i],0)) < self.__threshold:
+    #                     tracker.addFeature(torch.unsqueeze(features[i],0))
+    #                 break
+    #         ids.append(id)
+
+    #     for i in range(length):
+    #         distances = []
+    #         for tracker in self.__trackers:
+    #             if tracker.id in ids:
+    #                 continue
+    #             distances.append((tracker.getDistance(torch.unsqueeze(features[i],0))))
+    #         max_dist = 0
+    #         if len(distances) != 0:
+    #             max_dist = max(distances)
+    #         if max_dist > self.__threshold:
+    #             self.__trackers[distances.index(max_dist)].track_id = track_ids[i]
+    #             ids[i] = self.__trackers[distances.index(max_dist)].id
+    #         else:
+    #             #print(track_ids)
+    #             self.__trackers.append(Tracker(self.__trackers_counter))
+    #             self.__trackers[-1].addFeature(torch.unsqueeze(features[i],0))
+    #             #print(f"\n\n***{track_ids[i]}***\n\n")
+    #             self.__trackers[-1].track_id = track_ids[i]
+    #             self.__trackers_counter += 1 
+    #             ids[i] = self.__trackers[-1].id
+    #     return ids
+    
     def extract_ids(self, track_ids : List[int], img_patchs : List[np.ndarray]) -> List[int]:
         if len(track_ids) != len(img_patchs):
             raise ValueError(f"Track_ids (size {len(track_ids)} size is different from img_patchs (size {len(img_patchs)})")
@@ -96,7 +137,7 @@ class ReIDManager(object):
             distance_matrix_height = len(distance_matrix.shape)
             distance_matrix_width = distance_matrix.shape[0]
 
-            # print(distance_matrix)
+            print(distance_matrix)
             # print(index_max)
 
 
