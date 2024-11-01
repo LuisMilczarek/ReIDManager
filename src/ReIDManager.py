@@ -91,24 +91,26 @@ class ReIDManager(object):
                 distance_matrix = torch.cat((distance_matrix, torch.unsqueeze(self.__trackers[i].getDistance(not_selected_features),0)),0)
 
             # print(distance_matrix)
+
+            if distance_matrix.numel() > 0:
             
-            index_max = torch.argmax(distance_matrix)
-            distance_matrix_height = len(distance_matrix.shape)
-            distance_matrix_width = distance_matrix.shape[0]
-
-            # print(distance_matrix)
-            # print(index_max)
-
-
-            while distance_matrix[index_max % distance_matrix_width, index_max // distance_matrix_width, ] > self.__threshold:
-                ids[not_selected_track_ids_indexes[index_max // distance_matrix_width]] = self.__trackers[trackers_not_matched_indexes[index_max % distance_matrix_width]].id
-
-                distance_matrix[index_max % distance_matrix_width,:] = -1
-                distance_matrix[:, index_max // distance_matrix_width] = -1
-
                 index_max = torch.argmax(distance_matrix)
+                distance_matrix_height = len(distance_matrix.shape)
+                distance_matrix_width = distance_matrix.shape[0]
+    
                 # print(distance_matrix)
-                # print(index_max % distance_matrix_width)
+                # print(index_max)
+    
+    
+                while distance_matrix[index_max % distance_matrix_width, index_max // distance_matrix_width, ] > self.__threshold:
+                    ids[not_selected_track_ids_indexes[index_max // distance_matrix_width]] = self.__trackers[trackers_not_matched_indexes[index_max % distance_matrix_width]].id
+    
+                    distance_matrix[index_max % distance_matrix_width,:] = -1
+                    distance_matrix[:, index_max // distance_matrix_width] = -1
+    
+                    index_max = torch.argmax(distance_matrix)
+                    # print(distance_matrix)
+                    # print(index_max % distance_matrix_width)
         for i in range(length):
             if ids[i] == -1:
                 self.__trackers.append(Tracker(self.__trackers_counter))
