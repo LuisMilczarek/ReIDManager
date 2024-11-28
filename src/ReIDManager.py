@@ -85,23 +85,13 @@ class ReIDManager(object):
                 if tracker.id not in ids:
                     trackers_not_matched_indexes.append(i)
 
-
             distance_matrix = torch.tensor([], dtype=torch.float64, device=self.__device)
             for i in trackers_not_matched_indexes:
                 distance_matrix = torch.cat((distance_matrix, torch.unsqueeze(self.__trackers[i].getDistance(not_selected_features),0)),0)
-
-            # print(distance_matrix)
-
             if distance_matrix.numel() > 0:
             
                 index_max = torch.argmax(distance_matrix)
-                distance_matrix_height = len(distance_matrix.shape)
                 distance_matrix_width = distance_matrix.shape[0]
-    
-                # print(distance_matrix)
-                # print(index_max)
-    
-    
                 while distance_matrix[index_max % distance_matrix_width, index_max // distance_matrix_width, ] > self.__threshold:
                     ids[not_selected_track_ids_indexes[index_max // distance_matrix_width]] = self.__trackers[trackers_not_matched_indexes[index_max % distance_matrix_width]].id
     
@@ -109,8 +99,6 @@ class ReIDManager(object):
                     distance_matrix[:, index_max // distance_matrix_width] = -1
     
                     index_max = torch.argmax(distance_matrix)
-                    # print(distance_matrix)
-                    # print(index_max % distance_matrix_width)
         for i in range(length):
             if ids[i] == -1:
                 self.__trackers.append(Tracker(self.__trackers_counter))
@@ -119,3 +107,8 @@ class ReIDManager(object):
                 self.__trackers_counter += 1 
                 ids[i] = self.__trackers[-1].id
         return ids
+    
+    def clean(self) -> None:
+        self.__trackers = []
+        self.__trackers_counter = 0
+        return
