@@ -30,6 +30,7 @@ class ReIDManager(object):
             self.__model_name,
             self.__model_path,
             image_size=self.__img_size,
+            device=self.__device
         )
 
     def extract_id(self, track_id : int, img_patch : np.ndarray) -> int:
